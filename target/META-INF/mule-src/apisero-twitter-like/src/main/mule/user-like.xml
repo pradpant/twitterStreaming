@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<flow name="user-like-flow" doc:id="f1158f26-25e5-4acd-996f-c0ff71e49130" >
+		<ee:transform doc:name="Transform Message" doc:id="19056339-2592-46dd-bdb6-7e5f4ab09e46" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="OAuth.dwl" variableName="OAuth" />
+			</ee:variables>
+		</ee:transform>
+		<http:request method="POST" doc:name="POST : /like" doc:id="1419f9e9-32c6-43bf-aad6-5e88a9933a13" config-ref="HTTP_Request_configuration" path="/${twitter.path}">
+			<http:body ><![CDATA[#[{}]]]></http:body>
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : payload.Authorization replace "\\" with("") 
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	id : attributes.queryParams.id
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="DW converting Response to required format" doc:id="7b36dabe-5c89-4f0b-b3c9-e2eafb089d59" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="convertResponse.dwl" variableName="Response" />
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="forming Twitter URL" doc:id="67fc06a4-f098-4d67-93fd-9aa30c22c800">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="twitter_url.dwl" variableName="URL" />
+			</ee:variables>
+		
+</ee:transform>
+			<http:request method="POST" doc:name="POST :  /slackWebHook" doc:id="3297a7bd-92e6-4135-90a4-1ad188823fe8" url="https://hooks.slack.com/services/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">
+					</http:request>
+		<logger level="INFO" doc:name="After Calling Api" doc:id="087496fd-f7c4-464b-97d8-6743490cc0a4" message="#[payload]"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c4651ac1-5f05-47e6-a707-b04121aed85d" type="ANY">
+				<set-payload value="#[error.description]" doc:name="Set Error Description" doc:id="3123b265-841a-427e-82ad-a8b18ee3a135" />
+				<logger level="ERROR" doc:name="Log Error" doc:id="f389fbe4-7fd0-4543-968f-65bf84b8390c" message='#["ERROR:" ++ payload]'/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

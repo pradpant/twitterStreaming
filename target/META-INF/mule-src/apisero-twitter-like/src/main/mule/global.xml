@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="52534db4-d387-4884-afac-bd442d30ae3d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="7d83edfe-574f-4c24-bb70-06d7bb0a7ec1" file="secure-config-${mule.env}.yaml" key="${runtime.key}" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="01cebe50-8c90-46da-83ee-d18454156f62" basePath="/${twitter.basePath}">
+		<http:request-connection protocol="HTTPS" host="${twitter.host}"/>
+	</http:request-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="9be509da-c470-42c1-949e-9e63f23922f5" file="config.yaml" />
+	<api-gateway:autodiscovery apiId="16869889" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="d7066648-d39c-4a29-abd7-189ef470bfe8" flowRef="apisero-twitter-like-sys-api-main" />
+</mule>

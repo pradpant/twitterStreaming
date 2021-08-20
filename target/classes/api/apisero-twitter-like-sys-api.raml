@@ -1,0 +1,28 @@
+#%RAML 1.0
+title: apisero-twitter-like-sys-api
+protocols:
+  - HTTPS
+
+types:
+  commonResponse: !include dataTypes/commonResponse.raml
+  commonErrorType: !include dataTypes/commonErrorType.raml
+
+traits:
+  client-id-required: !include /traits/clientAuthTrait.raml
+  commonErrorTrait: !include /traits/commonErrorTrait.raml
+
+/like:
+  post:
+    is: [client-id-required, commonErrorTrait]
+    queryParameters:
+      id: string
+    responses: 
+        200:
+          description: Success
+          body:
+            application/json:
+              type: commonResponse
+              examples:
+                output: !include examples/commonResponseExample.raml
+
+

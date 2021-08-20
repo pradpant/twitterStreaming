@@ -1,0 +1,45 @@
+{
+  "configs": [
+    "global.xml",
+    "apisero-twitter-like-sys-api.xml",
+    "user-like.xml"
+  ],
+  "secureProperties": [
+    "runtime.key"
+  ],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:apisero-twitter-like:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.3.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "api/apisero-twitter-like-sys-api.raml",
+        "api/dataTypes/commonErrorType.raml",
+        "api/dataTypes/commonResponse.raml",
+        "api/examples/commonResponseExample.raml",
+        "api/examples/error400.raml",
+        "api/examples/error401.raml",
+        "api/examples/error404.raml",
+        "api/examples/error500.raml",
+        "api/traits/clientAuthTrait.raml",
+        "api/traits/commonErrorTrait.raml",
+        "apisero-twitter-like-sys-api.xml",
+        "config.yaml",
+        "convertResponse.dwl",
+        "global.xml",
+        "log4j2.xml",
+        "OAuth.dwl",
+        "secure-config-dev.yaml",
+        "twitter_url.dwl",
+        "user-like.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}
